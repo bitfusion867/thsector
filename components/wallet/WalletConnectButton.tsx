@@ -2,6 +2,7 @@
 
 import { useWeb3Modal } from "@web3modal/wagmi/react"
 import { useAccount, useDisconnect } from "wagmi"
+// import { useAppKit, useAppKitAccount,useDisconnect } from "@reown/appkit/react";
 import { Wallet, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -12,6 +13,7 @@ import { usePathname, useRouter } from "next/navigation"
 
 export function WalletConnectButton() {
   const { open } = useWeb3Modal()
+  // const { open } = useAppKit()
   const { address, isConnected } = useAccount()
   const { disconnect } = useDisconnect()
 

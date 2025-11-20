@@ -1,4 +1,5 @@
 import type { Metadata } from "next"
+import { headers } from 'next/headers' // added
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { ViewTransitions } from "next-view-transitions"
@@ -6,6 +7,7 @@ import { ThemeProvider } from "@/components/ui/theme-provider"
 import Navigation from "@/components/ui/navigation"
 import Footer from "@/components/ui/footer"
 import { Providers } from "./providers"
+// import ContextProvider from "@/lib/wallet/context"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -20,6 +22,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  // const headersObj = await headers();
+  // const cookies = headersObj.get('cookie')
+
   return (
     <ViewTransitions>
       <html lang="en" suppressHydrationWarning>
