@@ -247,7 +247,7 @@ export default async function Home() {
               { name: "DeFiChad", text: "24/7 trading + on-chain proof of ownership = the future. Already up 34% on my portfolio." },
             ].map((t, i) => (
               <Card key={i} className="p-8">
-                <p className="italic text-lg mb-6">"{t.text}"</p>
+                <p className="italic text-lg mb-6">&quot;{t.text}&quot;</p>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500" />
                   <div className="text-left">

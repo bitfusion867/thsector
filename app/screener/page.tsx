@@ -1,10 +1,10 @@
 import type { Metadata } from "next"
-import { columns } from "@/app/screener/components/columns"
-import { DataTable } from "@/app/screener/components/data-table"
+// import { columns } from "@/app/screener/components/columns"
+// import { DataTable } from "@/app/screener/components/data-table"
 import { DEFAULT_SCREENER } from "@/lib/yahoo-finance/constants"
 import { fetchScreenerStocks } from "@/lib/yahoo-finance/fetchScreenerStocks"
 import { PredefinedScreenerModules } from "@/types/yahoo-finance"
-import { RecommendationsBySymbolResponse } from "yahoo-finance2/modules/recommendationsBySymbol"
+// import { RecommendationsBySymbolResponse } from "yahoo-finance2/modules/recommendationsBySymbol"
 
 export const metadata: Metadata = {
   title: "Finly: Stock screener",

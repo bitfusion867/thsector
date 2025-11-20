@@ -2,7 +2,7 @@
 
 import { CellContext, ColumnDef } from "@tanstack/react-table"
 
-import type { ScreenerQuote } from "@/node_modules/yahoo-finance2/dist/esm/src/modules/screener"
+import type { ScreenerQuote } from "@/node_modules/yahoo-finance2/esm/src/modules/screener"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
 
