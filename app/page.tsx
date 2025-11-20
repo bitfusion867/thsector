@@ -81,9 +81,10 @@ export default async function Home() {
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
-            <Button  size="lg" className="h-12 px-8 font-semibold bg-emerald-500 hover:bg-emerald-400 text-black">
-              <Wallet className="mr-2 h-5 w-5" /> Connect Wallet to Start <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+            {/* <Button  size="lg" className="h-12 px-8 font-semibold bg-emerald-500 hover:bg-emerald-400 text-black"> */}
+              {/* <Wallet className="mr-2 h-5 w-5" /> Connect Wallet to Start <ArrowRight className="ml-2 h-4 w-4" /> */}
+              <WalletConnectButton/>
+            {/* </Button> */}
             <Button size="lg" variant="outline" className="h-12 px-8 border-white/30 bg-white/10 backdrop-blur text-white hover:bg-white/20">
               <Zap className="mr-2 h-5 w-5" /> See How It Works
             </Button>
