@@ -3,7 +3,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X, TrendingUp, Search, DollarSign } from "lucide-react"
+import { Menu, X , Home} from "lucide-react"
 
 import { ThemeToggle } from "./theme-toggle"
 import { WalletConnectButton } from "@/components/wallet/WalletConnectButton"
@@ -12,11 +12,6 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import  CommandMenu  from "./command-menu"
 import { useState } from "react"
 
-const NAV_ITEMS = [
-  { title: "Markets", href: "/", icon: TrendingUp },
-  { title: "Screener", href: "/screener", icon: Search },
-  { title: "Pricing & Plans", href: "/pricing", icon: DollarSign },
-]
 
 export default function Navigation() {
   const pathname = usePathname()
@@ -33,24 +28,6 @@ export default function Navigation() {
             The Sector
           </div>
         </Link>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8">
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.title}
-              href={item.href}
-              className={`flex items-center gap-2 text-sm font-medium transition-colors hover:text-foreground ${
-                isActive(item.href)
-                  ? "text-foreground"
-                  : "text-muted-foreground"
-              }`}
-            >
-              <item.icon className="h-4 w-4" />
-              {item.title}
-            </Link>
-          ))}
-        </nav>
 
         {/* Right Side – Wallet + Controls */}
         <div className="flex items-center gap-4">
@@ -71,23 +48,6 @@ export default function Navigation() {
             </SheetTrigger>
             <SheetContent side="right" className="w-80">
               <div className="flex flex-col gap-8 pt-8">
-                <div className="space-y-6">
-                  {NAV_ITEMS.map((item) => (
-                    <Link
-                      key={item.title}
-                      href={item.href}
-                      onClick={() => setMobileOpen(false)}
-                      className={`flex items-center gap-3 text-lg font-medium transition-colors ${
-                        isActive(item.href)
-                          ? "text-foreground"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      <item.icon className="h-5 w-5" />
-                      {item.title}
-                    </Link>
-                  ))}
-                </div>
 
                 <div className="border-t pt-6">
                   <WalletConnectButton />

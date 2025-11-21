@@ -11,6 +11,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
+import { useToast } from "@/hooks/use-toast"
+
 
 interface TradeModalProps {
   open: boolean
@@ -27,6 +29,7 @@ export function TradeModal({ open, onOpenChange, symbol, type, currentPrice, cha
   const [activeTab, setActiveTab] = useState<"buy" | "sell">("buy")
   const [amountUSD, setAmountUSD] = useState("")
   const [amountShares, setAmountShares] = useState("")
+  const {toast} = useToast()
 
   const isPositive = change24h >= 0
   const estimatedShares = amountUSD ? (parseFloat(amountUSD) / currentPrice).toFixed(6) : "0"
@@ -47,79 +50,119 @@ export function TradeModal({ open, onOpenChange, symbol, type, currentPrice, cha
     }
   }
 
+  function handleOpenModal() {
+    toast({
+      title: "Account not activated",
+      description: "Please activate your account before making any purchase.",
+      variant: "destructive",
+    })
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center">
+      <DialogContent className="sm:max-w-xs p-4 rounded-xl">
+        <DialogHeader className="pb-2">
+          <DialogTitle className="text-xl font-bold text-center">
             Trade {symbol}
           </DialogTitle>
         </DialogHeader>
 
         {/* Asset Header */}
-        <div className="flex items-center justify-between p-4 rounded-xl bg-muted/50">
-          <div className="flex items-center gap-4">
-            <Avatar className="h-12 w-12">
-              <AvatarFallback className="text-2xl font-black bg-gradient-to-br from-emerald-500 to-cyan-500">
-                {type === "crypto" ? (symbol === "BTC" ? "₿" : symbol === "ETH" ? "Ξ" : symbol[0]) : symbol[0]}
+        <div className="flex items-center justify-between p-3 rounded-lg bg-muted/40">
+          <div className="flex items-center gap-3">
+            <Avatar className="h-10 w-10">
+              <AvatarFallback className="text-lg font-black bg-gradient-to-br from-emerald-500 to-cyan-500">
+                {type === "crypto"
+                  ? symbol === "BTC"
+                    ? "₿"
+                    : symbol === "ETH"
+                      ? "Ξ"
+                      : symbol[0]
+                  : symbol[0]}
               </AvatarFallback>
             </Avatar>
-            <div>
-              <p className="text-xl font-bold">{symbol}/USDC</p>
-              <p className="text-sm text-muted-foreground">{type === "stock" ? "U.S. Stock" : "Cryptocurrency"}</p>
+
+            <div className="leading-tight">
+              <p className="font-bold text-sm">{symbol}/USDC</p>
+              <p className="text-[11px] text-muted-foreground">
+                {type === "stock" ? "U.S. Stock" : "Crypto Asset"}
+              </p>
             </div>
           </div>
-          <div className="text-right">
-            <p className="text-2xl font-black">${currentPrice.toFixed(type === "crypto" && symbol !== "BTC" ? 4 : 2)}</p>
-            <Badge variant={isPositive ? "default" : "destructive"} className="mt-1">
-              {isPositive ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
+
+          <div className="text-right leading-tight">
+            <p className="text-lg font-black">
+              ${currentPrice.toFixed(type === "crypto" && symbol !== "BTC" ? 4 : 2)}
+            </p>
+            <Badge
+              variant={isPositive ? "default" : "destructive"}
+              className="text-[10px] px-1 py-0.5 mt-1"
+            >
+              {isPositive ? (
+                <TrendingUp className="h-3 w-3 mr-1" />
+              ) : (
+                <TrendingDown className="h-3 w-3 mr-1" />
+              )}
               {Math.abs(change24h).toFixed(2)}%
             </Badge>
           </div>
         </div>
 
-        {/* Buy / Sell Tabs */}
-        <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "buy" | "sell")}>
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="buy" className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white">
+        {/* Tabs */}
+        <Tabs
+          value={activeTab}
+          onValueChange={(v) => setActiveTab(v as "buy" | "sell")}
+          className="mt-3"
+        >
+          <TabsList className="grid w-full grid-cols-2 h-8 text-xs">
+            <TabsTrigger
+              value="buy"
+              className="data-[state=active]:bg-emerald-500 data-[state=active]:text-white"
+            >
               Buy
             </TabsTrigger>
-            <TabsTrigger value="sell" className="data-[state=active]:bg-red-500 data-[state=active]:text-white">
+            <TabsTrigger
+              value="sell"
+              className="data-[state=active]:bg-red-500 data-[state=active]:text-white"
+            >
               Sell
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="buy" className="space-y-5 mt-6">
-            <div className="space-y-4">
+          {/* Buy */}
+          <TabsContent value="buy" className="space-y-3 mt-4">
+            <div className="space-y-3">
               <div>
-                <Label htmlFor="usd">Amount in USD</Label>
-                <div className="relative mt-2">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                <Label className="text-xs" htmlFor="usd">Amount (USD)</Label>
+                <div className="relative mt-1">
+                  <span className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground text-xs">
+                    $
+                  </span>
                   <Input
                     id="usd"
                     value={amountUSD}
                     onChange={handleUSDChange}
                     placeholder="0.00"
-                    className="pl-8 text-lg font-medium"
+                    className="pl-6 h-9 text-sm"
                   />
                 </div>
               </div>
 
               <div className="flex items-center justify-center">
-                <ArrowDownUp className="h-5 w-5 text-muted-foreground" />
+                <ArrowDownUp className="h-4 w-4 text-muted-foreground" />
               </div>
 
               <div>
-                <Label htmlFor="shares">You Receive</Label>
-                <div className="relative mt-2">
+                <Label className="text-xs" htmlFor="shares">You Receive</Label>
+                <div className="relative mt-1">
                   <Input
                     id="shares"
                     value={estimatedShares}
                     readOnly
                     placeholder="0.000000"
-                    className="pr-12 text-lg font-medium bg-muted/50"
+                    className="pr-10 h-9 text-sm bg-muted/40"
                   />
-                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">
+                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground text-xs">
                     {symbol}
                   </span>
                 </div>
@@ -128,42 +171,46 @@ export function TradeModal({ open, onOpenChange, symbol, type, currentPrice, cha
 
             <Separator />
 
-            <div className="space-y-3 text-sm">
+            {/* Compact Summary */}
+            <div className="text-[11px] space-y-1">
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Available Balance</span>
+                <span className="text-muted-foreground">Balance:</span>
                 <span className="font-medium">${mockBalance.toLocaleString()} USDC</span>
               </div>
+
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Est. Fee (Gas + 0.3%)</span>
+                <span className="text-muted-foreground">Fees (est):</span>
                 <span className="font-medium">~$2.40</span>
               </div>
             </div>
 
             <Button
-              size="lg"
-              className="w-full h-14 text-lg font-bold bg-emerald-500 hover:bg-emerald-400 text-black shadow-lg"
-              disabled={!amountUSD || parseFloat(amountUSD) > mockBalance}
+              size="sm"
+              className="w-full h-10 text-sm font-semibold bg-emerald-500 hover:bg-emerald-400 text-black"
+              onClick={handleOpenModal}
             >
-              <Wallet className="h-6 w-6 mr-3" />
-              {parseFloat(amountUSD) > mockBalance ? "Insufficient Balance" : `Buy ${symbol} Now`}
+              <Wallet className="h-4 w-4 mr-2" />
+              Buy {symbol}
             </Button>
           </TabsContent>
 
-          <TabsContent value="sell" className="space-y-5 mt-6">
-            <div className="p-4 rounded-lg bg-muted/50 text-center">
-              <p className="text-sm text-muted-foreground">You own</p>
-              <p className="text-2xl font-black">0.000000 {symbol}</p>
+          {/* Sell */}
+          <TabsContent value="sell" className="space-y-3 mt-4">
+            <div className="p-3 rounded-md bg-muted/40 text-center">
+              <p className="text-xs text-muted-foreground">You own</p>
+              <p className="text-lg font-black">0.000000 {symbol}</p>
             </div>
 
-            <Button variant="outline" className="w-full" disabled>
+            <Button variant="outline" size="sm" className="w-full"
+              onClick={handleOpenModal}>
               Connect wallet to sell
             </Button>
           </TabsContent>
         </Tabs>
 
-        <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground mt-4">
-          <Wallet className="h-4 w-4" />
-          <span>Instant settlement • No custody • 100% on-chain</span>
+        <div className="flex items-center justify-center gap-2 text-[10px] text-muted-foreground mt-3">
+          <Wallet className="h-3 w-3" />
+          <span>Instant settlement • On-chain • No custody</span>
         </div>
       </DialogContent>
     </Dialog>

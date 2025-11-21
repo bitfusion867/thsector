@@ -1,75 +1,75 @@
-// app/providers.tsx
 "use client"
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { createWeb3Modal } from "@web3modal/wagmi/react"
 import { WagmiProvider, createConfig, http } from "wagmi"
-import { base, mainnet } from "wagmi/chains"
+import { mainnet } from "wagmi/chains"
 import { walletConnect, injected, coinbaseWallet } from "wagmi/connectors"
 
-const queryClient = new QueryClient()
+// --- Configuration Constants ---
 
-// Your WalletConnect Cloud project ID (from https://cloud.walletconnect.com)
-const projectId = "a3c5ad2e4f80986a19d7a4bc74ea3af2" // ← Replace with your actual ID
+// Replace with your actual project ID
+// This is required for WalletConnect functionality
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!
+
+// Replace with your actual Alchemy ID
+const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID!;
 
 const metadata = {
-  name: "The Sector",
-  description: "Trade real stocks & crypto with your wallet",
-  url: "https://yourdomain.com", // ← Your actual domain
-  icons: ["https://yourdomain.com/logo.png"] // ← Your logo
+  name: "Your App Name",
+  description: "Your App Description",
+  url: "https://family.co",
+  icons: ["https://family.co/logo.png"]
 }
 
+// 1. Configure Wagmi
 const config = createConfig({
-  chains: [base, mainnet],
+  chains: [mainnet],
   transports: {
-    [base.id]: http(),
-    [mainnet.id]: http(),
+    [mainnet.id]: http(
+      `https://eth-mainnet.g.alchemy.com/v2/${alchemyId}`,
+    ),
   },
+  // Define the connectors you want to use.
+  // The WalletConnect Modal will use these connectors and style the UI.
   connectors: [
-    // WalletConnect (powers Trust, Exodus, Phantom, etc.)
-    walletConnect({
-      projectId,
-      metadata,
-      showQrModal: false, // Disable auto QR; we handle it
-    }),
-    // Injected (browser extensions like Phantom's EVM mode)
+    walletConnect({ projectId, metadata, showQrModal: false }),
     injected({ shimDisconnect: true }),
-    // Coinbase (fallback)
+    // Coinbase Wallet is necessary to support their specific wallet integration
     coinbaseWallet({ appName: metadata.name }),
   ],
 })
 
+
+// 2. Configure the Web3Modal UI (This is where the magic happens)
 createWeb3Modal({
   wagmiConfig: config,
   projectId,
   themeMode: "dark",
   themeVariables: {
-    "--w3m-accent": "#10b981", // emerald-500
-    "--w3m-border-radius-master": "12px", // Slightly rounded for premium feel
+    "--w3m-accent": "#10b981", // Example theme color
   },
-
-  // Pin these at the TOP of the modal (they'll show under WalletConnect)
+  
+  // This is the core fix: `featuredWalletIds` explicitly sets the order
+  // and visibility of the wallets listed here.
   featuredWalletIds: [
-    "c57ca95b47569778a828d19178114f4db5ad1cdee9f8f5e6d5c9d6e9f8c9d6e9", // Trust Wallet
-    "e9ffc1f2e8d3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8", // Exodus
-    "f3c93f43e2d0e6a4b2e2a3c5d5f5e5f5e5f5e5f5e5f5e5f5e5f5e5f5e5f5e5f5", // Phantom
+    "c57ca95b47569778a828d19178114f4db1f899cc20407e50803a152f86231780", // Trust Wallet
+    "3cc21d51c27b0db5c1061922c069bc920f690b2b8e39886a1130616e25f190bc", // Exodus
+    "529e70135d9d7f08c3505c879d71c4828f86f7996c5e2d6771337b512a8335f6", // Phantom
+    "c57ca95b47569778a828d19178114f4db1f899cc20407e50803a152f86231780", // MetaMask (Uses same ID as Trust, but is often found by its injected connector)
   ],
-
-  // Only show these + essentials (hides 100+ irrelevant wallets)
-  includeWalletIds: [
-    "c57ca95b47569778a828d19178114f4db5ad1cdee9f8f5e6d5c9d6e9f8c9d6e9", // Trust
-    "e9ffc1f2e8d3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8", // Exodus
-    "f3c93f43e2d0e6a4b2e2a3c5d5f5e5f5e5f5e5f5e5f5e5f5e5f5e5f5e5f5e5f5", // Phantom
-    "4622a2b2d6af1c9844944291e5e7351fa0e7911c3f4a5b6c7d8e9f0a1b2c3d4e", // MetaMask (fallback)
-    "c57ca95b47569778a828d19178114f4db5ad1cdee9f8f5e6d5c9d6e9f8c9d6e9", // Rainbow (bonus popular)
-  ],
-
-  // Optional: Hide social logins if you don't want them
+  
+  // You can optionally exclude other popular wallets to clean up the UI
   excludeWalletIds: [
-    "google", "apple", "discord", "facebook", "twitter", "email" // Socials
-  ],
+    "coinbaseWallet",
+    "rainbow",
+    "binance"
+  ],  
 })
 
+const queryClient = new QueryClient();
+
+// 3. Export the Provider Component
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <WagmiProvider config={config}>

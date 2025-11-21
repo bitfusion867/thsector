@@ -7,6 +7,8 @@ import { ThemeProvider } from "@/components/ui/theme-provider"
 import Navigation from "@/components/ui/navigation"
 import Footer from "@/components/ui/footer"
 import { Providers } from "./providers"
+import { Toaster } from "@/components/ui/toaster"
+import {Toaster as ReactHostToast} from "react-hot-toast"
 // import ContextProvider from "@/lib/wallet/context"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -29,9 +31,11 @@ export default function RootLayout({
     <ViewTransitions>
       <html lang="en" suppressHydrationWarning>
         <body
-          className={`${inter.className} min-h-screen bg-background pb-6 antialiased selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black`}
+          className={`${inter.className} bg-background antialiased selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black`}
         >
           <Providers>
+            <Toaster />
+            <ReactHostToast />
             <ThemeProvider
               attribute="class"
               defaultTheme="system"
@@ -39,7 +43,7 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <Navigation />
-              <main className="container">{children}</main>
+              <main>{children}</main>
               <Footer />
             </ThemeProvider>
           </Providers>

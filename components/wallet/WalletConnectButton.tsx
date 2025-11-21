@@ -2,7 +2,6 @@
 
 import { useWeb3Modal } from "@web3modal/wagmi/react"
 import { useAccount, useDisconnect } from "wagmi"
-// import { useAppKit, useAppKitAccount,useDisconnect } from "@reown/appkit/react";
 import { Wallet, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -11,9 +10,10 @@ import { useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 
+const CONNECT_INITIATED_FLAG = "connectInitiated";
+
 export function WalletConnectButton() {
   const { open } = useWeb3Modal()
-  // const { open } = useAppKit()
   const { address, isConnected } = useAccount()
   const { disconnect } = useDisconnect()
 
@@ -23,24 +23,39 @@ export function WalletConnectButton() {
   useEffect(() => {
     if (isConnected && address) {
       const wasDirected = sessionStorage.getItem("wasDirected")
+      const connectInitiated = sessionStorage.getItem(CONNECT_INITIATED_FLAG)
 
-      if (!wasDirected && !pathname.includes("dashboard")) {
+      // Only redirect if:
+      // 1. The connection was just initiated by a button click (connectInitiated flag is present)
+      // 2. We haven't already been directed to OTP/Dashboard (wasDirected flag is absent)
+      // 3. We are not already on a dashboard page
+      if (connectInitiated && !wasDirected && !pathname.includes("dashboard")) {
+        
+        // 1. Clear the one-time flag immediately
+        sessionStorage.removeItem(CONNECT_INITIATED_FLAG);
+        
+        // 2. Set the persistent flag to prevent future redirects on page refresh/re-render
         sessionStorage.setItem("wasDirected", "true")
-        router.replace("/dashboard")
+        
+        // 3. Perform the redirection
+        window.location.href = ("/otp")
       }
-
     }
-  }, [isConnected, address, router, pathname])
+  }, [isConnected, address, pathname])
 
   function handleOpen() {
+    // Set a flag *before* opening the modal to signal this is a user-initiated connect
+    sessionStorage.setItem(CONNECT_INITIATED_FLAG, "true");
     open();
   }
 
   function handleLogOut() {
     disconnect()
-    router.push("/")
+    window.location.href = ("/")
     sessionStorage.removeItem("wasDirected")
+    sessionStorage.removeItem(CONNECT_INITIATED_FLAG) // Also clear the connect flag on logout
   }
+
   if (!isConnected) {
     return (
       <Button
@@ -49,11 +64,10 @@ export function WalletConnectButton() {
         onClick={handleOpen}
       >
         <Wallet className="mr-2 h-5 w-5" />
-        Connect Wallet
+        Sign In
       </Button>
     )
   }
-
 
   return (
     <div className="flex items-center gap-3">

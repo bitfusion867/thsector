@@ -18,7 +18,7 @@ export default function Footer() {
               The Sector
             </h2>
             <p className="mt-3 text-sm text-muted-foreground max-w-xs">
-              Trade real U.S. stocks and crypto instantly with your wallet. No KYC. No banks. Fully on-chain.
+              Trade real U.S. stocks with crypto instantly with your wallet. Fully on-chain.
             </p>
             <div className="mt-6">
               <WalletConnectButton />

@@ -2,11 +2,19 @@ import { ArrowUpRight, ArrowDownRight } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
-const transactions = [
-  { type: "buy", symbol: "NVDA", shares: 2.5, price: 508.20, total: 1270.50, time: "2 hours ago" },
-  { type: "sell", symbol: "AAPL", shares: 5.0, price: 192.10, total: 960.50, time: "5 hours ago" },
-  { type: "buy", symbol: "TSLA", shares: 3.0, price: 255.80, total: 767.40, time: "1 day ago" },
-  { type: "buy", symbol: "META", shares: 1.8, price: 488.30, total: 878.94, time: "2 days ago" },
+interface Transactions {
+  type: string
+  symbol: string
+  shares: number
+  price: number
+  total: number
+  time: string
+}
+const transactions: Transactions[] = [
+  // { type: "buy", symbol: "NVDA", shares: 2.5, price: 508.20, total: 1270.50, time: "2 hours ago" },
+  // { type: "sell", symbol: "AAPL", shares: 5.0, price: 192.10, total: 960.50, time: "5 hours ago" },
+  // { type: "buy", symbol: "TSLA", shares: 3.0, price: 255.80, total: 767.40, time: "1 day ago" },
+  // { type: "buy", symbol: "META", shares: 1.8, price: 488.30, total: 878.94, time: "2 days ago" },
 ]
 
 export function RecentTransactions() {
@@ -14,7 +22,7 @@ export function RecentTransactions() {
     <Card className="p-6">
       <h3 className="font-bold text-lg mb-4">Recent Activity</h3>
       <div className="space-y-4">
-        {transactions.map((tx, i) => (
+        {transactions?.length > 0 ? transactions.map((tx, i) => (
           <div key={i} className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Avatar className="h-10 w-10">
@@ -34,7 +42,7 @@ export function RecentTransactions() {
               <p className="text-xs text-muted-foreground">@ ${tx.price.toFixed(2)}</p>
             </div>
           </div>
-        ))}
+        )): <div>No recent activity</div>}
       </div>
     </Card>
   )

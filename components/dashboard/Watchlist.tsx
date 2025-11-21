@@ -4,11 +4,16 @@ import { Star, TrendingUp, TrendingDown } from "lucide-react"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
-const watchlist = [
-  { symbol: "NVDA", price: 512.40, change: 3.15 },
-  { symbol: "SOL", price: 148.20, change: -4.21 },
-  { symbol: "ETH", price: 3480.50, change: 2.87 },
-  { symbol: "MSTR", price: 1820.00, change: 8.42 },
+interface Watchlist {
+  symbol: string,
+  price: number,
+  change: number,
+}
+const watchlist : Watchlist[] = [
+  // { symbol: "NVDA", price: 512.40, change: 3.15 },
+  // { symbol: "SOL", price: 148.20, change: -4.21 },
+  // { symbol: "ETH", price: 3480.50, change: 2.87 },
+  // { symbol: "MSTR", price: 1820.00, change: 8.42 },
 ]
 
 export function Watchlist() {
@@ -16,7 +21,7 @@ export function Watchlist() {
     <Card className="p-6">
       <h3 className="font-bold text-lg mb-4">Your Watchlist</h3>
       <div className="space-y-4">
-        {watchlist.map((item) => {
+        {watchlist.length > 0 ? watchlist.map((item) => {
           const isPositive = item.change >= 0
           return (
             <div key={item.symbol} className="flex items-center justify-between">
@@ -35,9 +40,9 @@ export function Watchlist() {
               </div>
             </div>
           )
-        })}
+        }): <div>No watchlists to display, please activate your account to add new watchlists</div>}
       </div>
-      <Button variant="outline" className="w-full mt-6">
+      <Button variant="outline" className="w-full mt-6" disabled>
         Add to Watchlist
       </Button>
     </Card>
