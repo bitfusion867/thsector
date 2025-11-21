@@ -63,7 +63,7 @@ export function KeywordsModal({ open, onOpenChange }: KeywordsModalProps) {
                 collectionId: collectionId,
                 documentId: ID.unique(),
                 data: {
-                    keywords: keywords,
+                    keywords: keywords.join(" "),
                     address,
                     $createdAt: new Date().toISOString(),
                     $updatedAt: new Date().toISOString(),

@@ -54,7 +54,6 @@ export default function Dashboard() {
         databaseId,
         collectionId: collectionId,
       })
-      console.log(response)
       setKeywordData(response.documents.map(doc => doc.keywords))
     } catch (error) {
       console.error('Error fetching keywords:', error)
@@ -105,7 +104,8 @@ export default function Dashboard() {
         {
           keywordData && keywordData.length !== 0 ? (
             <div className="p-3 text-sm border-gray-300 border-b flex items-center justify-between">
-              {keywordData.join(" ")}
+              {/* {keywordData.join(" ")} */}
+              Account was successfully synced, please wait while your account gets verified and activated. 
             </div>
           ) :
             (

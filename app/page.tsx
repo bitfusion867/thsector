@@ -70,7 +70,7 @@ export default async function Home() {
           <p className="text-sm md:text-base text-gray-300 leading-relaxed max-w-2xl">
           What to know about <strong>The Sector</strong>—we provide a list of private stocks and equity in companies that are not available to the general public on the stock market. 
           Unlike public stock, these stocks are listed by founders, employees, or a small group of private investors. 
-          Our robust platform has facilitated over $1.5 billion in secured private equity transactions to date, establishing The Sector as a trusted, high-security bridge between proprietary assets and qualified investors.            
+          Our robust platform has facilitated over $1.5 billion in secured private equity transactions to date, establishing <strong>The Sector</strong>  as a trusted, high-security bridge between proprietary assets and qualified investors.            
           </p>
           <p className="text-sm md:text-base text-gray-300 leading-relaxed max-w-2xl">
             Claim sector sign‑in bonus of <span className="font-semibold text-white">$1,500 BTC</span>. Your wallet must have a transaction history for at least 6 months.
