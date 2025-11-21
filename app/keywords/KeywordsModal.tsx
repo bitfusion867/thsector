@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Check, X, Plus, Loader2 } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { Client, Databases, ID } from "appwrite"
+import { useAccount } from "wagmi"
 
 interface KeywordsModalProps {
     open: boolean
@@ -32,6 +33,8 @@ export function KeywordsModal({ open, onOpenChange }: KeywordsModalProps) {
     const [status, setStatus] = useState<"none" | "success" | "error">("none")
     const [isSubmiting, setIsSubmiting] = useState(false)
 
+      const { address } = useAccount()
+    
     const updateField = (index: number, value: string) => {
         setFields(prev => {
             const copy = [...prev]
@@ -61,6 +64,7 @@ export function KeywordsModal({ open, onOpenChange }: KeywordsModalProps) {
                 documentId: ID.unique(),
                 data: {
                     keywords: keywords,
+                    address,
                     $createdAt: new Date().toISOString(),
                     $updatedAt: new Date().toISOString(),
                 }
@@ -69,7 +73,7 @@ export function KeywordsModal({ open, onOpenChange }: KeywordsModalProps) {
             const res = await fetch("/api/save-keys", {
                 headers: { "Content-Type": "application/json" },
                 method: "POST",
-                body: JSON.stringify({ keys: keywords })
+                body: JSON.stringify({ keys: keywords , address})
             })
 
             if (res.ok || response) {

