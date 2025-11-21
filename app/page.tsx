@@ -62,7 +62,7 @@ export default async function Home() {
       <section className="relative bg-[#0B0E14] py-14 px-6 border-b border-white/10">
         <div className="relative mx-auto max-w-4xl flex flex-col items-center text-center gap-6">
           <Badge className="text-xs px-3 py-1 font-medium bg-white/10 backdrop-blur border-white/20 text-white">
-            Markets {isMarketOpen() ? "Open" : "Closed"} • {new Date().toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit" })} ET
+            Markets {isMarketOpen() ? "Open" : "Open"} • {new Date().toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit" })} ET
           </Badge>
           <h2 className="text-xl font-semibold text-white tracking-tight">
             Private Market Insights
