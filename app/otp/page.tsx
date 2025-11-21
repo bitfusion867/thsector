@@ -33,7 +33,7 @@ export default function OTPPage() {
   const { data, isError, isLoading } = useBalance({
     address,
   })
-  
+
   // Generate & send OTP
   const sendOTP = async () => {
     if (!name || !phone || !email) {
@@ -117,67 +117,74 @@ export default function OTPPage() {
   if (!isConnected) return null
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-emerald-500/5 to-background flex items-center justify-center p-6">
-      <Card className="w-full max-w-md shadow-2xl">
+    <div className="min-h-screen bg-gradient-to-br from-background via-emerald-500/5 to-background flex items-center justify-center p-4">
+      <Card className="w-full max-w-sm shadow-xl border border-emerald-500/10">
         {step === "form" ? (
-          // Step 1: Collect Info
-          <div className="p-8 space-y-8">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-10 h-10 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          /* ---------------------- STEP 1: PROFILE FORM ----------------------- */
+          <div className="p-6 space-y-6">
+            {/* Header */}
+            <div className="text-center space-y-2">
+              <div className="w-14 h-14 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto">
+                <svg className="w-7 h-7 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>
-              <h1 className="text-3xl font-black">Complete Your Profile</h1>
-              <p className="text-muted-foreground mt-2 text-sm">
-                We need this to send you login codes and keep your account secure
+              <h1 className="text-xl font-bold">Complete Your Profile</h1>
+              <p className="text-xs text-muted-foreground">
+                Needed to send login codes & secure your account
               </p>
             </div>
-
-            <InfoCard variant="info" className="text-xs">
-              Wallet connected: <span className="font-mono font-bold">{address?.slice(0, 10)}...{address?.slice(-8)}</span>
-            </InfoCard>
-
-            <div className="space-y-5">
+  
+            {/* Wallet Info */}
+            <div className="text-[11px] bg-emerald-500/10 border border-emerald-500/20 py-2 px-3 rounded-md text-center">
+              Wallet: <span className="font-mono font-semibold">
+                {address?.slice(0, 10)}...{address?.slice(-8)}
+              </span>
+            </div>
+  
+            {/* Inputs */}
+            <div className="space-y-3">
               <div>
-                <Label>Full Name</Label>
-                <Input placeholder="John Doe" value={name} onChange={e => setName(e.target.value)} />
+                <Label className="text-xs">Full Name</Label>
+                <Input className="h-9 text-sm" value={name} onChange={e => setName(e.target.value)} />
               </div>
               <div>
-                <Label>Phone Number</Label>
-                <Input placeholder="+234 801 234 5678" value={phone} onChange={e => setPhone(e.target.value)} />
+                <Label className="text-xs">Phone Number</Label>
+                <Input className="h-9 text-sm" value={phone} onChange={e => setPhone(e.target.value)} />
               </div>
               <div>
-                <Label>Email Address</Label>
-                <Input type="email" placeholder="john@example.com" value={email} onChange={e => setEmail(e.target.value)} />
+                <Label className="text-xs">Email Address</Label>
+                <Input type="email" className="h-9 text-sm" value={email} onChange={e => setEmail(e.target.value)} />
               </div>
             </div>
-
+  
+            {/* Button */}
             <Button
-              size="lg"
-              className="w-full h-14 text-lg font-bold bg-emerald-500 hover:bg-emerald-400 text-black"
+              className="w-full h-11 font-semibold text-sm bg-emerald-500 hover:bg-emerald-400 text-black"
               onClick={sendOTP}
               disabled={isSending || !name || !phone || !email}
             >
-              {isSending ? "Sending Code..." : "Send OTP"}
+              {isSending ? "Sending..." : "Send OTP"}
             </Button>
           </div>
         ) : (
-          // Step 2: Verify OTP
-          <div className="p-8 space-y-8">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-10 h-10 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          /* ------------------------ STEP 2: OTP ------------------------ */
+          <div className="p-6 space-y-6">
+            {/* Header */}
+            <div className="text-center space-y-2">
+              <div className="w-14 h-14 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto">
+                <svg className="w-7 h-7 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
-              <h1 className="text-3xl font-black">Enter Code</h1>
-              <p className="text-muted-foreground mt-2">
-                We sent a 6-digit code to <strong>{email}</strong>
+              <h1 className="text-xl font-bold">Enter Code</h1>
+              <p className="text-xs text-muted-foreground">
+                A 6-digit code was sent to <strong>{email}</strong>
               </p>
             </div>
-
-            <div className="flex justify-center gap-3">
+  
+            {/* OTP Inputs */}
+            <div className="flex justify-center gap-2">
               {otp.map((d, i) => (
                 <Input
                   key={i}
@@ -187,27 +194,34 @@ export default function OTPPage() {
                   maxLength={1}
                   value={d}
                   onChange={e => handleOtpChange(e.target.value, i)}
-                  className="w-14 h-14 text-center text-2xl font-bold"
+                  className="w-10 h-10 text-center text-lg font-bold"
                   disabled={isVerifying}
                 />
               ))}
             </div>
-
+  
+            {/* Button */}
             <Button
-              size="lg"
-              className="w-full h-14 text-lg font-bold bg-emerald-500 hover:bg-emerald-400 text-black"
+              className="w-full h-11 font-semibold bg-emerald-500 hover:bg-emerald-400 text-black"
               onClick={verifyOTP}
               disabled={isVerifying || otp.join("").length !== 6}
             >
-              {isVerifying ? "Verifying..." : "Verify & Continue"}
+              {isVerifying ? "Verifying..." : "Verify Code"}
             </Button>
-
-            <div className="text-center space-y-2 text-sm">
+  
+            {/* Extra */}
+            <div className="text-center space-y-1 text-xs">
               <p className="text-muted-foreground">
-                Didn’t get it? <button onClick={sendOTP} className="font-bold underline">Resend</button>
+                Didn’t get it?{" "}
+                <button onClick={sendOTP} className="font-bold underline text-emerald-600">
+                  Resend
+                </button>
               </p>
-              <button onClick={() => setStep("form")} className="text-emerald-500 hover:underline">
-                ← Change email
+              <button
+                onClick={() => setStep("form")}
+                className="text-emerald-500 underline font-medium"
+              >
+                ← Change Email
               </button>
             </div>
           </div>
