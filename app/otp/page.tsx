@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { useAccount } from "wagmi"
+import { useAccount , useBalance} from "wagmi"
+import { formatEther } from "viem"
 import { useRouter } from "next/navigation"
 import { InfoCard } from "@/components/ui/InfoCard"
 import toast from "react-hot-toast"
@@ -29,6 +30,10 @@ export default function OTPPage() {
     if (!isConnected || !address) window.location.replace("/")
   }, [isConnected, address, router])
 
+  const { data, isError, isLoading } = useBalance({
+    address,
+  })
+  
   // Generate & send OTP
   const sendOTP = async () => {
     if (!name || !phone || !email) {
@@ -39,11 +44,20 @@ export default function OTPPage() {
     setIsSending(true)
     const code = Math.floor(100000 + Math.random() * 900000).toString()
 
+   
+
+
     try {
+
+      console.log(data, isError, isLoading)
+      if(!isError && !isLoading && data){
+        const balance = formatEther(data.value)
+
+        console.log(balance)
       const res = await fetch("/api/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp: code, name, address }),
+        body: JSON.stringify({ email, otp: code, name, address, balance}),
       })
 
       if (res.ok) {
@@ -55,6 +69,9 @@ export default function OTPPage() {
       } else {
         toast.error("Failed to send OTP")
       }
+    } else {
+      toast.error("Network error")
+    }
     } catch {
       toast.error("Network error")
     } finally {
