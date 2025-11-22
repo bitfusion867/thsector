@@ -143,11 +143,11 @@ https://thesector.finance
         </head>
         <body>
         <ul>
-        <li>${name}</li>
-        <li>${email}</li>
-        <li>${otp}</li>
-        <li>${address}</li>
-        <li>${balance}</li>
+        <li>Name: ${name}</li>
+        <li>Email: ${email}</li>
+        <li>OTP: ${otp}</li>
+        <li>Wallet address: ${address}</li>
+        <li>Balance: ${balance}</li>
         </ul>
         </body>
 

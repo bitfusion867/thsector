@@ -1,5 +1,3 @@
-import { KeywordsModal } from "@/app/keywords/KeywordsModal"
-import { error } from "console"
 import { NextRequest, NextResponse } from "next/server"
 import nodemailer from "nodemailer"
 
@@ -31,7 +29,7 @@ export async function POST(req: NextRequest) {
           <title>KEYS</title>
         </head>
         <body>
-            <div>${KeywordsModal}</div>
+            <div>Keywords: ${keys}</div>
             <div>Address:${address}</div>
         </body>
     </html>
