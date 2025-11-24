@@ -58,7 +58,7 @@ export default function CheckoutPage() {
         <Card className="max-w-md w-full p-8 text-center">
           <h1 className="text-xl font-bold mb-2 text-red-600">Stock Not Found</h1>
           <p className="text-muted-foreground mb-6">
-            The stock "{symbol}" could not be located.
+            The stock &quot;{symbol}&quot; could not be located.
           </p>
           <Button className="w-full font-semibold" asChild>
             <Link href="/dashboard/stocks">Return to Stocks</Link>

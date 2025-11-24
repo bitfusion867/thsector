@@ -9,7 +9,7 @@ export default function GoBack() {
   return (
     <Button
       aria-label="Go Back"
-      variant={"custom"}
+      variant={"default"}
       onClick={() => router.back()}
       className="group flex w-fit flex-row items-center gap-2 px-0 font-medium text-blue-500"
     >
