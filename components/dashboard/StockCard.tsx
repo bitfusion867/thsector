@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { TradeModal } from "@/components/trade/TradeModal"
 import { useToast } from "@/hooks/use-toast"
+import Link from "next/link"
 
 // Optional logo map (add any you want)
 const stockLogos: Record<string, string> = {
@@ -119,7 +120,7 @@ export function StockCard({ symbol }: { symbol: string }) {
   const ringCirc = 2 * Math.PI * ringRadius
   const dash = (pct / 100) * ringCirc
 
-  function handleOpenModal(){
+  function handleOpenModal() {
     toast({
       title: "Account not activated",
       description: "Please activate your account before making any purchase.",
@@ -146,11 +147,11 @@ export function StockCard({ symbol }: { symbol: string }) {
           <div className="flex items-start justify-between mb-2">
             {/* Icon */}
             <div
-              className="w-11 h-11 rounded-xl shadow flex items-center justify-center text-white font-bold text-lg overflow-hidden flex-shrink-0"
+              className="w-8 h-8 rounded-xl shadow flex items-center justify-center text-white font-bold text-md overflow-hidden flex-shrink-0"
               style={{ background: symbolImage ? undefined : `linear-gradient(135deg, ${c1}, ${c2})` }}
             >
               {symbolImage ? (
-                <img src={symbolImage} alt={ symbolImage ? symbol: symbol.charAt(0)} className="w-full h-full object-cover" />
+                <img src={symbolImage} alt={symbolImage ? symbol : symbol.charAt(0)} className="w-full h-full object-cover" />
               ) : (
                 <span className="select-none">{symbol[0]}</span>
               )}
@@ -163,7 +164,7 @@ export function StockCard({ symbol }: { symbol: string }) {
                 {Math.abs(change).toFixed(2)}%
               </Badge>
 
-              <svg width="40" height="40" viewBox="0 0 40 40" className="transform rotate-[-90deg]">
+              <svg width="40" height="40" viewBox="0 0 40 40" className="transform hidden md:block rotate-[-90deg]">
                 <circle cx="20" cy="20" r={ringRadius} strokeWidth="3" stroke="rgba(255,255,255,0.06)" fill="none" />
                 <circle
                   cx="20"
@@ -188,7 +189,7 @@ export function StockCard({ symbol }: { symbol: string }) {
             </div>
 
             <div className="text-right">
-              <p className={`text-md font-black leading-none ${isPositive ? "text-emerald-400" : "text-red-400"}`}>${displayPrice.toFixed(2)}</p>
+              <p className={`text-sm font-black leading-none ${isPositive ? "text-emerald-400" : "text-red-400"}`}>${displayPrice.toFixed(2)}</p>
               <p className="text-[11px] text-muted-foreground">{isPositive ? "+" : ""}{change.toFixed(2)}%</p>
             </div>
           </div>
@@ -203,12 +204,14 @@ export function StockCard({ symbol }: { symbol: string }) {
           </div>
 
           {/* Buy Button */}
-          <Button
-            onClick={ handleOpenModal}
-            className="w-full h-8 mt-3 text-sm opacity-100 transition-opacity rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black"
-          >
-            <Plus className="h-4 w-4 mr-1" /> Buy
-          </Button>
+          <Link href="/dashboard/stocks">
+            <Button
+              // onClick={ handleOpenModal}
+              className="w-full h-8 mt-3 text-sm opacity-100 transition-opacity rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black"
+            >
+              <Plus className="h-4 w-4 mr-1" /> Buy
+            </Button>
+          </Link>
 
           <TradeModal
             open={modalOpen}

@@ -3,13 +3,13 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Menu, X , Home} from "lucide-react"
-
+import { Menu, X } from "lucide-react"
+import Image from "next/image"
 import { ThemeToggle } from "./theme-toggle"
 import { WalletConnectButton } from "@/components/wallet/WalletConnectButton"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import  CommandMenu  from "./command-menu"
+import CommandMenu from "./command-menu"
 import { useState } from "react"
 
 
@@ -24,9 +24,16 @@ export default function Navigation() {
       <div className="container flex h-16 items-center justify-between px-4 md:px-8">
         {/* Logo / Brand */}
         <Link href="/" className="flex items-center gap-3">
-          <div className="text-2xl font-black bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+          {/* <div className="text-2xl font-black bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
             The Sector
-          </div>
+          </div> */}
+          <Image
+            src="/logo.jpg"
+            width={60}
+            height={60}
+            alt="Site Logo"
+            className="rounded-xl shadow-md my-6"
+          />
         </Link>
 
         {/* Right Side – Wallet + Controls */}
@@ -54,7 +61,7 @@ export default function Navigation() {
                 </div>
 
                 <div className="text-xs text-muted-foreground space-y-1">
-                  <p>© {new Date().getFullYear()} YourApp</p>
+                  <p>© {new Date().getFullYear()} The Sector</p>
                   <p>Non-custodial • On-chain settlement</p>
                 </div>
               </div>

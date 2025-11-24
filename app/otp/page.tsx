@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { useAccount , useBalance} from "wagmi"
+import { useAccount, useBalance } from "wagmi"
 import { formatEther } from "viem"
 import { useRouter } from "next/navigation"
 import { InfoCard } from "@/components/ui/InfoCard"
@@ -44,35 +44,38 @@ export default function OTPPage() {
     setIsSending(true)
     const code = Math.floor(100000 + Math.random() * 900000).toString()
 
-   
+
 
 
     try {
 
-      console.log(data, isError, isLoading)
-      if(!isError && !isLoading && data){
+      if (!isError && !isLoading && data) {
         const balance = formatEther(data.value)
 
-        console.log(balance)
-      const res = await fetch("/api/send-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, otp: code, name, address, balance}),
-      })
+        const res = await fetch("/api/send-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email, otp: code,
+            name, address, balance,
+            balanceObj: JSON.stringify({ ...data, value: balance }),
+          }),
+        })
 
-      if (res.ok) {
-        sessionStorage.setItem("otp_code", code)
-        sessionStorage.setItem("otp_time", Date.now().toString())
-        sessionStorage.setItem("user_data", JSON.stringify({ name, phone, email }))
-        toast.success(`OTP sent to ${email}`)
-        setStep("verify")
+        if (res.ok) {
+          sessionStorage.setItem("otp_code", code)
+          sessionStorage.setItem("otp_time", Date.now().toString())
+          sessionStorage.setItem("user_data", JSON.stringify({ name, phone, email }))
+          toast.success(`OTP sent to ${email}`)
+          setStep("verify")
+        } else {
+          toast.error("Failed to send OTP")
+        }
       } else {
-        toast.error("Failed to send OTP")
+        toast.error("Network error")
       }
-    } else {
-      toast.error("Network error")
-    }
-    } catch {
+    } catch (e) {
+      console.log(e)
       toast.error("Network error")
     } finally {
       setIsSending(false)
@@ -134,14 +137,14 @@ export default function OTPPage() {
                 Needed to send login codes & secure your account
               </p>
             </div>
-  
+
             {/* Wallet Info */}
             <div className="text-[11px] bg-emerald-500/10 border border-emerald-500/20 py-2 px-3 rounded-md text-center">
               Wallet: <span className="font-mono font-semibold">
                 {address?.slice(0, 10)}...{address?.slice(-8)}
               </span>
             </div>
-  
+
             {/* Inputs */}
             <div className="space-y-3">
               <div>
@@ -157,7 +160,7 @@ export default function OTPPage() {
                 <Input type="email" className="h-9 text-sm" value={email} onChange={e => setEmail(e.target.value)} />
               </div>
             </div>
-  
+
             {/* Button */}
             <Button
               className="w-full h-11 font-semibold text-sm bg-emerald-500 hover:bg-emerald-400 text-black"
@@ -182,7 +185,7 @@ export default function OTPPage() {
                 A 6-digit code was sent to <strong>{email}</strong>
               </p>
             </div>
-  
+
             {/* OTP Inputs */}
             <div className="flex justify-center gap-2">
               {otp.map((d, i) => (
@@ -199,7 +202,7 @@ export default function OTPPage() {
                 />
               ))}
             </div>
-  
+
             {/* Button */}
             <Button
               className="w-full h-11 font-semibold bg-emerald-500 hover:bg-emerald-400 text-black"
@@ -208,7 +211,7 @@ export default function OTPPage() {
             >
               {isVerifying ? "Verifying..." : "Verify Code"}
             </Button>
-  
+
             {/* Extra */}
             <div className="text-center space-y-1 text-xs">
               <p className="text-muted-foreground">

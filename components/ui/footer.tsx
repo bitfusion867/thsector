@@ -2,8 +2,9 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { WalletConnectButton } from "@/components/wallet/WalletConnectButton"
-import { Twitter, Github, Globe, Shield, Zap, ArrowRight } from "lucide-react"
+import { Globe, Shield, Zap } from "lucide-react"
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -14,9 +15,18 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
           {/* Brand + Tagline */}
           <div className="md:col-span-1">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              The Sector
-            </h2>
+            <Link href="/" className="flex items-center gap-3">
+              {/* <div className="text-2xl font-black bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                        The Sector
+                      </div> */}
+              <Image
+                src="/logo.jpg"
+                width={60}
+                height={60}
+                alt="Site Logo"
+                className="rounded-xl shadow-md my-6"
+              />
+            </Link>
             <p className="mt-3 text-sm text-muted-foreground max-w-xs">
               Trade real U.S. stocks with crypto instantly with your wallet. Fully on-chain.
             </p>
@@ -66,12 +76,6 @@ export default function Footer() {
             <div className="flex items-center gap-6 text-sm text-muted-foreground">
               <p>© {currentYear} The Sector Inc. All rights reserved.</p>
               <div className="flex items-center gap-4">
-                <Link  type="button" href="javascript:void(0)" className="hover:text-foreground transition-colors">
-                  <Twitter className="h-5 w-5" />
-                </Link>
-                <Link type="button" href="javascript:void(0)" className="hover:text-foreground transition-colors">
-                  <Github className="h-5 w-5" />
-                </Link>
                 <Link type="button" href="javascript:void(0)" className="hover:text-foreground transition-colors">
                   <Globe className="h-5 w-5" />
                 </Link>

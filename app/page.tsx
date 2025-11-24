@@ -1,7 +1,7 @@
 // app/page.tsx – FINAL VERSION WITH ALL NEW SECTIONS
 import { Suspense } from "react"
 import Link from "next/link"
-import {  Shield, Lock, Globe } from "lucide-react"
+import { Shield, Lock, Globe, ArrowRight, Zap } from "lucide-react"
 
 import { DataTable } from "@/components/stocks/markets/data-table"
 import { columns } from "@/components/stocks/markets/columns"
@@ -10,6 +10,7 @@ import { fetchStockSearch } from "@/lib/yahoo-finance/fetchStockSearch"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { WalletConnectButton } from "@/components/wallet/WalletConnectButton"
+import { Spinner } from "@/components/ui/spinner"
 
 
 const yahooFinance = new YahooFinance()
@@ -57,36 +58,26 @@ export default async function Home() {
   const enriched = results.map((r, i) => ({ ...r, shortName: tickers[i].shortName }))
   const marketUp = enriched[0]?.regularMarketChangePercent > 0.1
 
+  // if (typeof window !== "undefined") {
+  try {
+
+    window.addEventListener("load", () => {
+      return (
+        <div className="flex justify-center items-center h-screen">
+          <Spinner />
+        </div>
+      )
+    })
+  } catch {
+
+  }
+  // }
+
   return (
     <>
-      <section className="relative bg-[#0B0E14] py-14 px-6 border-b border-white/10">
-        <div className="relative mx-auto max-w-4xl flex flex-col items-center text-center gap-6">
-          <Badge className="text-xs px-3 py-1 font-medium bg-white/10 backdrop-blur border-white/20 text-white">
-            Markets {isMarketOpen() ? "Open" : "Open"} • {new Date().toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit" })} ET
-          </Badge>
-          <h2 className="text-xl font-semibold text-white tracking-tight">
-            Private Market Insights
-          </h2>
-          <p className="text-sm md:text-base text-gray-300 leading-relaxed max-w-2xl">
-          What to know about <strong>The Sector</strong>—we provide a list of private stocks and equity in companies that are not available to the general public on the stock market. 
-          Unlike public stock, these stocks are listed by founders, employees, or a small group of private investors. 
-          Our robust platform has facilitated over $1.5 billion in secured private equity transactions to date, establishing <strong>The Sector</strong>  as a trusted, high-security bridge between proprietary assets and qualified investors.            
-          </p>
-          <p className="text-sm md:text-base text-gray-300 leading-relaxed max-w-2xl">
-            Claim sector sign‑in bonus of <span className="font-semibold text-white">$1,500 BTC</span>. Your wallet must have a transaction history for at least 6 months.
-          </p>
-          <div className="mt-2 flex flex-col sm:flex-row gap-3 justify-center">
-            <WalletConnectButton />
-          </div>
-          <div className="mt-4 flex flex-wrap justify-center gap-6 text-xs text-gray-400">
-            <div className="flex items-center gap-2"><Shield className="h-4 w-4 text-emerald-400" /> Private</div>
-            <div className="flex items-center gap-2"><Lock className="h-4 w-4 text-cyan-400" /> Non‑Custodial</div>
-            <div className="flex items-center gap-2"><Globe className="h-4 w-4 text-indigo-400" /> Global Access</div>
-          </div>
-          <br/>
-        </div>
+      <section className="relative bg-[#0B0E14] border-b border-white/10">
         {/* Live ticker */}
-        <div className="border-t border-white/10 bg-black/30 backdrop-blur-sm">
+        <div className="border-t border-white/10 bg-black/30 backdrop-blur-sm sticky">
           <div className="overflow-hidden">
             <div className="flex animate-marquee py-3 whitespace-nowrap">
               {[...enriched, ...enriched].map((stock, i) => (
@@ -101,6 +92,65 @@ export default async function Home() {
             </div>
           </div>
         </div>
+        <div className="relative mx-auto max-w-4xl flex flex-col items-center text-center gap-6 py-8 px-4 sm:px-6">
+          {/* ⚡️ Top Status Badge */}
+
+          {/* 👑 Main Title - Larger, bolder, and tracked for elegance */}
+          <h1 className="text-base sm:text-3xl lg:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300 tracking-tight max-w-3xl">
+            Access Secured <span className="text-cyan-400">Proprietary Assets</span>
+          </h1>
+          <h2 className="text-base sm:text-xl font-semibold text-white tracking-wide -mt-4">
+            Private Market Insights
+          </h2>
+
+          {/* 📝 Core Value Proposition - Clearer and more impactful */}
+          <p className="text-sm lg:text-base text-gray-400 leading-relaxed max-w-2xl">
+            Unlock institutional-grade opportunities. We list private equity and pre-IPO stock otherwise unavailable to the general public. 
+            Unlike public stock, these stocks are listed by founders, employees, or a small group of private investors.
+            Our platform has facilitated over $1.5 billion in secured transactions.
+          </p>
+
+          {/* 🎁 Exclusive Offer - Highlighted with a separator/border */}
+          <div className="w-full max-w-xl border border-dashed border-cyan-500/30 bg-zinc-800/30 rounded-lg p-4 shadow-xl">
+            {/* 🎁 Exclusive Offer: Ensure internal elements wrap gracefully on small screens */}
+            <div className="flex flex-col sm:flex-row items-center justify-center text-center sm:text-left">
+              {/* Icon and Main Offer Text */}
+              <p className="text-sm font-medium text-white flex items-center justify-center flex-wrap sm:flex-nowrap mb-1 sm:mb-0">
+                <Zap className="h-5 w-5 mr-2 text-yellow-400 animate-pulse flex-shrink-0" />
+                <span className="leading-snug">Exclusive Offer: Claim your sign-in bonus of
+                  <strong className="text-yellow-300 ml-1 whitespace-nowrap">$1,500 BTC</strong>.
+                </span>
+              </p>
+            </div>
+
+            {/* Requirement text: Centered on mobile, tighter spacing */}
+            <p className="text-sm text-gray-400 mt-1 text-center leading-relaxed">
+              Requirement: Your connected wallet must have a transaction history for at least <strong className="text-white"> 6 months. </strong>
+            </p>
+          </div>
+
+          {/* 🚀 Primary CTA - Larger and more defined */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <WalletConnectButton />
+          </div>
+
+          {/* 🔒 Feature List - Elevated and compact */}
+          <div className="mt-3 flex flex-wrap justify-center gap-6 sm:gap-10 text-xs text-gray-300">
+            <div className="flex items-center gap-2 font-medium">
+              <Shield className="h-4 w-4 text-emerald-400" /> Private Network
+            </div>
+            <div className="flex items-center gap-2 font-medium">
+              <Lock className="h-4 w-4 text-cyan-400" /> Non-Custodial
+            </div>
+            <div className="flex items-center gap-2 font-medium">
+              <Globe className="h-4 w-4 text-indigo-400" /> Global Access
+            </div>
+          </div>
+
+        </div>
+
+
+
       </section>
 
       <br /><br /><br /><br /><br />

