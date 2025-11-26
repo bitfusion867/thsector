@@ -98,7 +98,7 @@ export default function DashboardPage() {
   const [loadingKeywords, setLoadingKeywords] = useState(false)
 
   // Small helper: indicate account activated if keywords exist
-  const accountActivated = keywords.length > 0
+  const accountActivated = keywords.length  > 0 
 
   // compact fetch function using appwrite (safe-guarded)
   useEffect(() => {
@@ -111,7 +111,11 @@ export default function DashboardPage() {
           const res = await databases.listDocuments(APPWRITE_DATABASE, APPWRITE_COLLECTION)
           if (!mounted) return
           const docs = res.documents || []
-          const k = docs.map((d: any) => Array.isArray(d.keywords) ? d.keywords : [])
+          const k = docs.map((d: any) => { 
+           
+           return  (d.address === address) ? d.keywords : []
+          })
+          console.log({k})
           setKeywords(k)
         } catch (err) {
           console.error("Keywords fetch failed", err)
