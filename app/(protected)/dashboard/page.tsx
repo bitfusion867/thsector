@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useAccount } from "wagmi"
-// import { StockCard } from "@/components/dashboard/StockCard"
 import { PortfolioChart } from "@/components/dashboard/PortfolioChart"
 import { RecentTransactions } from "@/components/dashboard/RecentTransactions"
 import { Watchlist } from "@/components/dashboard/Watchlist"
@@ -20,9 +19,6 @@ import { KeywordsModal } from "@/app/keywords/KeywordsModal"
 import { allStocks } from "@/lib/data/stocks"
 import Image from "next/image"
 import Link from "next/link"
-// import { Separator } from "@/components/ui/separator"
-// import { SummaryCard } from "@/components/dashboard/SummaryCard" // optional central component if you have; otherwise fallback below
-// import { popular as popularSymbols } from "@/lib/data/popular" // optional; fallback below if missing
 
 // -----------------------------
 // Appwrite config (read from env)

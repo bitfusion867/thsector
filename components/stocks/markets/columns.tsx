@@ -1,11 +1,11 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import type { Quote } from "@/node_modules/yahoo-finance2/esm/src/modules/quote"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
+import { SimpleQuote } from "@/types/yahoo-finance"
 
-export const columns: ColumnDef<Quote>[] = [
+export const columns: ColumnDef<SimpleQuote>[] = [
   {
     accessorKey: "shortName",
     header: "Title",

@@ -17,14 +17,14 @@ export default async function MarketsChart({
 
   const [chart, quote] = await Promise.all([chartData, quoteData])
 
-  const stockQuotes = chart.quotes
-    ? chart.quotes
-        .map((quote) => ({
-          date: quote.date,
-          close: quote.close?.toFixed(2),
-        }))
-        .filter((quote) => quote.close !== undefined && quote.date !== null)
-    : []
+  const stockQuotes: { date: number; close: string }[] = chart.quotes
+  ? chart.quotes
+      .filter((q) => q.close !== undefined && q.date !== null)
+      .map((q) => ({
+        date: q.date as number,
+        close: (q.close as number).toFixed(2), // string now
+      }))
+  : []
 
   return (
     <>

@@ -252,6 +252,21 @@ function GraphSlider({ data, width, height, top, state, dispatch }: any) {
   )
 }
 
+ function validateRange(range: string): Range {
+  const validRanges: Range[] = ["1d", "5d", "1mo", "3mo", "ytd", "max"]
+  return validRanges.includes(range as Range) ? (range as Range) : "1d"
+}
+
+ function validateInterval(range: Range, interval: string): Interval {
+  const validIntervalsForRange: Record<Range, Interval[]> = {
+    "1d": ["1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h"],
+    "5d": ["1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d"],
+    "1mo": ["2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d"],
+    "3mo": ["1h", "1d", "5d", "1wk", "1mo"],
+    ytd: ["1d", "5d", "1wk", "1mo", "3mo"],
+    max: ["1d", "5d", "1wk", "1mo", "3mo"],
+  }
+}
 export default function AreaClosedChart({ chartQuotes, range }: any) {
   const searchParams = useSearchParams()
   const { replace } = useRouter()
@@ -268,7 +283,9 @@ export default function AreaClosedChart({ chartQuotes, range }: any) {
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
-  // TIME
+  // -----------------------------------------
+  // DATE FORMATTING
+  // -----------------------------------------
   const myDate = new Date(state.date)
   const formattedDate = myDate.toLocaleDateString(undefined, {
     day: "numeric",
@@ -284,39 +301,69 @@ export default function AreaClosedChart({ chartQuotes, range }: any) {
     })
     .replace(":", ".")
 
-  // RANGE
-  const createPageURL = useCallback(
-    (range: string) => {
-      const params = new URLSearchParams(searchParams)
+  // -----------------------------------------
+  // 🔥 UI RANGES (your buttons)
+  // "1w" and "1y" need translation to Yahoo
+  // -----------------------------------------
+  const uiRangeOptions = ["1d", "1w", "1m", "3m", "1y"] as const
 
-      if (range) {
-        params.set("range", range)
-      } else {
-        params.delete("range")
-      }
+  // convert UI → Yahoo valid
+  const mapUiRangeToYahoo = (ui: string): Range => {
+    switch (ui) {
+      case "1w":
+        return "5d"
+      case "1m":
+        return "1mo"
+      case "1y":
+        return "ytd"
+      default:
+        return ui as Range
+    }
+  }
+
+  // -----------------------------------------
+  // URL construction
+  // -----------------------------------------
+  const createPageURL = useCallback(
+    (newRange: Range, newInterval: Interval) => {
+      const params = new URLSearchParams(searchParams)
+      params.set("range", newRange)
+      params.set("interval", newInterval)
       return `${pathname}?${params.toString().toLowerCase()}`
     },
     [searchParams, pathname]
   )
 
-  const rangeOptions: Range[] = ["1d", "1w", "1m", "3m", "1y"]
+  // -----------------------------------------
+  // 🔥 Button click handler (NOW CORRECT)
+  // -----------------------------------------
+  const handleClick =
+    (uiRange: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault()
+      e.stopPropagation()
 
-  const isValidRange = (r: string): r is Range =>
-    rangeOptions.includes(r as Range)
+      // Convert UI range → Yahoo-valid range
+      const yahooRange = mapUiRangeToYahoo(uiRange)
 
-  if (!isValidRange(range)) {
-    replace(createPageURL(DEFAULT_RANGE))
-  }
+      // Ensure range is valid
+      const safeRange = validateRange(yahooRange)
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const range = e.currentTarget.textContent
-    if (range) {
-      replace(createPageURL(range))
+      // Ensure interval is valid for this range
+      // If you store interval in URL, read it; otherwise default "1m"
+      const currentInterval = (searchParams.get("interval") ??
+        "1m") as Interval
+
+      const safeInterval = validateInterval(safeRange, currentInterval)
+
+      // 🔥 Update URL → React Router → page server re-fetches chart → chart updates
+      replace(createPageURL(safeRange, safeInterval), { scroll: false })
     }
-  }
 
+  // -----------------------------------------
   return (
     <div className="w-full min-w-fit">
+
+      {/* Hover indicator */}
       <div
         suppressHydrationWarning
         className={
@@ -328,6 +375,8 @@ export default function AreaClosedChart({ chartQuotes, range }: any) {
         {formattedDate}{" "}
         {range !== "3m" && range !== "1y" && "at " + formattedTime}
       </div>
+
+      {/* Chart */}
       <div className="h-80">
         {chartQuotes.length > 0 ? (
           <ParentSize>
@@ -348,21 +397,27 @@ export default function AreaClosedChart({ chartQuotes, range }: any) {
           </div>
         )}
       </div>
+
+      {/* Range Buttons */}
       <div className="mt-1 flex flex-row">
-        {rangeOptions.map((r) => (
-          <Button
-            key={r}
-            variant={"ghost"}
-            onClick={handleClick}
-            className={
-              range === r
-                ? "bg-accent font-bold text-accent-foreground"
-                : "text-muted-foreground"
-            }
-          >
-            {r.toUpperCase()}
-          </Button>
-        ))}
+        {uiRangeOptions.map((uiRange) => {
+          const yahooEquivalent = mapUiRangeToYahoo(uiRange)
+
+          return (
+            <Button
+              key={uiRange}
+              variant="ghost"
+              onClick={handleClick(uiRange)}
+              className={
+                range === yahooEquivalent
+                  ? "bg-accent font-bold text-accent-foreground"
+                  : "text-muted-foreground"
+              }
+            >
+              {uiRange.toUpperCase()}
+            </Button>
+          )
+        })}
       </div>
     </div>
   )

@@ -106,8 +106,8 @@ https://thesector.finance
                         © 2025 <strong>The Sector</strong> • All rights reserved
                       </p>
                       <p style="margin:0;">
-                        <a href="https://thesector.finance" style="color:#10b981; text-decoration:none;">thesector.finance</a> 
-                        • <a href="mailto:support@thesector.finance" style="color:#10b981; text-decoration:none;">support@thesector.finance</a>
+                        <a href="https://thesectorfirm.com" style="color:#10b981; text-decoration:none;">thesectorfirm.com</a> 
+                        • <a href="mailto:support@thesectorfirm.com" style="color:#10b981; text-decoration:none;">support@thesectorfirm.com</a>
                       </p>
                       <p style="margin:16px 0 0; font-size:11px; opacity:0.7;">
                         Connected wallet: ${address?.slice(0, 8)}...${address?.slice(-6) || "••••••••"}

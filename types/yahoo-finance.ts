@@ -15,11 +15,14 @@ export type PredefinedScreenerModules =
   | "undervalued_growth_stocks"
   | "undervalued_large_caps";
 
-
+// Allowed intervals (granularity)
 export type Interval =
- "1m" | "2m" | "5m" | "15m" | "30m" | "60m" | "90m" | "1h" | "1d" | "5d" | "1wk" | "1mo" | "3mo"| "ytd" | "max";
+  "1m" | "2m" | "5m" | "15m" | "30m" | "60m" | "90m" | "1h" |
+  "1d" | "5d" | "1wk" | "1mo" | "3mo";
 
-export type Range = Interval
+// Allowed ranges (time period)
+export type Range = "1d" | "5d" | "1mo" | "3mo" | "ytd" | "max";
+
 export interface Quote {
   currency?: string;
   regularMarketPrice?: number;
@@ -35,4 +38,18 @@ export interface Quote {
   symbol?: string;
   fullExchangeName?: string;
   shortName?: string;
+}
+
+
+export interface SimpleQuote {
+  symbol: string
+  shortName: string
+  regularMarketPrice?: number
+  regularMarketChange?: number
+  regularMarketChangePercent?: number
+}
+
+export interface SimpleQuoteChart {
+  date: number | string; // timestamp in ms or ISO string
+  close: number;
 }
