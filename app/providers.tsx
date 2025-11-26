@@ -18,8 +18,8 @@ const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID!;
 const metadata = {
   name: "The Sector",
   description: "Trade real U.S. stocks with crypto instantly with your wallet. Fully on-chain",
-  url: "https://thesectorfirm.com",
-  icons: ["/logo.jpg"]
+  url: "https://www.thesectorfirm.com",
+  icons: ["https://www.thesectorfirm.com/logo.jpg"]
 }
 
 // 1. Configure Wagmi
