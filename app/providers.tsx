@@ -16,10 +16,10 @@ const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!
 const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID!;
 
 const metadata = {
-  name: "Your App Name",
-  description: "Your App Description",
-  url: "https://family.co",
-  icons: ["https://family.co/logo.png"]
+  name: "The Sector",
+  description: "Trade real U.S. stocks with crypto instantly with your wallet. Fully on-chain",
+  url: "https://thesectorfirm.com",
+  icons: ["/logo.jpg"]
 }
 
 // 1. Configure Wagmi
