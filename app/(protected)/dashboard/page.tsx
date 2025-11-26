@@ -115,7 +115,6 @@ export default function DashboardPage() {
            
            return  (d.address === address) ? d.keywords : []
           })
-          console.log({k})
           setKeywords(k)
         } catch (err) {
           console.error("Keywords fetch failed", err)

