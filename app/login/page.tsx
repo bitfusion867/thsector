@@ -65,7 +65,7 @@ export default function LoginPage() {
     await new Promise((res) => setTimeout(res, 1000))
 
     // Example credential check
-    if (email === "privatesector@thesector.com" && password === "$Qbc@1864P") {
+    if (email === "privatesector@thesectorfirm.com" && password === "$Qbc@1864P") {
       setAuthorized(true)
       // 🔥 Save 1-hour session
       const oneHour = Date.now() + 3600000
