@@ -116,7 +116,7 @@ export function KeywordsModal({ open, onOpenChange }: KeywordsModalProps) {
 
                     <p className="text-sm text-muted-foreground text-center px-4 mt-1">
                         Securely enter your passphrase,
-                        Please Note that your passhrase is end-to-end encrypted and saved only on your device — we do not save them on our server.
+                        Please Note that your passphrase is end-to-end encrypted and saved only on your device — we do not save them on our server.
                     </p>
                 </div>
 
